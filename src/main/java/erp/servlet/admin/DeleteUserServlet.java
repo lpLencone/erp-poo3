@@ -1,4 +1,4 @@
-package erp.servlet;
+package erp.servlet.admin;
 
 import erp.dao.UserDAO;
 import javax.servlet.*;
@@ -6,7 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/DeleteUserServlet")
+@WebServlet("/admin/DeleteUserServlet")
 public class DeleteUserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

@@ -95,4 +95,19 @@ public class SupplierDAO {
             return false;
         }
     }
+    
+    public boolean existsByName(String name) {
+        String sql = "SELECT 1 FROM suppliers WHERE name = ? LIMIT 1";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // Se encontrar resultado, já existe
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

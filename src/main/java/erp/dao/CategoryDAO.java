@@ -89,4 +89,22 @@ public class CategoryDAO {
 
         return false;
     }
+
+	public Category getCategoryById(int id) {
+		String sql = "SELECT categories WHERE id = ?";
+		Category category = null;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        	stmt.setInt(1, id);
+        	ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+            	category = new Category(rs.getInt("id"), rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return category;
+	}
 }

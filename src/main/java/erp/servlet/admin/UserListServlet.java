@@ -1,4 +1,4 @@
-package erp.servlet;
+package erp.servlet.admin;
 
 import erp.dao.UserDAO;
 import erp.model.User;
@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/UserListServlet")
+@WebServlet("/admin/UserListServlet")
 public class UserListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class UserListServlet extends HttpServlet {
 
         request.setAttribute("users", users);
         request.setAttribute("filtro", role);
-        request.getRequestDispatcher("admin/userManagement.jsp").forward(request, response);
+        request.getRequestDispatcher("userManagement.jsp").forward(request, response);
     }
 
     private int roleToId(String role) {

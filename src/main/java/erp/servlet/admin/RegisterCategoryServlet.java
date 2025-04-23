@@ -1,4 +1,4 @@
-package erp.servlet;
+package erp.servlet.admin;
 
 import erp.dao.CategoryDAO;
 import erp.model.Category;
@@ -7,7 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 
-@WebServlet("/RegisterCategoryServlet")
+@WebServlet("/admin/RegisterCategoryServlet")
 public class RegisterCategoryServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -41,12 +41,12 @@ public class RegisterCategoryServlet extends HttpServlet {
 
             // Envia a mensagem para a página JSP
             request.setAttribute("message", message);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("admin/registerCategory.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("registerCategory.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             request.setAttribute("message", "Erro: " + e.getMessage());
-            request.getRequestDispatcher("admin/registerCategory.jsp").forward(request, response);
+            request.getRequestDispatcher("registerCategory.jsp").forward(request, response);
         }
     }
 }

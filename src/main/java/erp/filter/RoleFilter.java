@@ -24,18 +24,18 @@ public class RoleFilter implements Filter {
         if (uri.startsWith("/erp/admin/")) {
             // Restrito a admin e gerente
             if (userRole == null || (!userRole.equals("Administrador") && !userRole.equals("Gerente"))) {
-                httpResponse.sendRedirect("/erp/unauthorized.jsp"); // Acesso não autorizado
+                httpResponse.sendRedirect("/erp/unauthorized.html"); // Acesso não autorizado
                 return;
             }
         } else if (uri.startsWith("/erp/employee/")) {
             // Restrito a admin, gerente e funcionário
             if (userRole == null || (!userRole.equals("Administrador") && !userRole.equals("Gerente") && !userRole.equals("Funcionario"))) {
-                httpResponse.sendRedirect("/erp/unauthorized.jsp"); // Acesso não autorizado
+                httpResponse.sendRedirect("/erp/unauthorized.html"); // Acesso não autorizado
                 return;
             }
         }
 
-        chain.doFilter(request, response); // Permite a requisição continuar
+        chain.doFilter(request, response);
     }
 
     public void destroy() {}

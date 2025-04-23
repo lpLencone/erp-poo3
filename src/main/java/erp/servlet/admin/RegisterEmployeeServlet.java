@@ -1,4 +1,4 @@
-package erp.servlet;
+package erp.servlet.admin;
 
 import erp.dao.UserDAO;
 import erp.model.User;
@@ -9,7 +9,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/RegisterEmployeeServlet")
+@WebServlet("/admin/RegisterEmployeeServlet")
 public class RegisterEmployeeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -42,15 +42,15 @@ public class RegisterEmployeeServlet extends HttpServlet {
             boolean success = userDAO.insertUser(new User(name, email, password, roleId));
 
             if (success) {
-                response.sendRedirect("painel.jsp");
+                response.sendRedirect("/erp/employee/adminPanel.jsp");
             } else {
                 request.setAttribute("errorMessage", "Erro ao cadastrar usuário.");
-                request.getRequestDispatcher("admin/registerEmployee.jsp").forward(request, response);
+                request.getRequestDispatcher("registerEmployee.jsp").forward(request, response);
             }
 
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Erro ao cadastrar usuário: " + e.getMessage());
-            request.getRequestDispatcher("admin/registerEmployee.jsp").forward(request, response);
+            request.getRequestDispatcher("registerEmployee.jsp").forward(request, response);
         }
     }
 }
