@@ -27,8 +27,10 @@
 
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole) || "Funcionario".equals(userRole)) { %>
         <p><a href="/erp/admin/registerCategory.jsp">Cadastrar Categoria</a></p>
-        <p><a href="/erp/admin/registerProduct.jsp">Cadastrar Produto</a></p>
-        <p><a href="/erp/productManagement">Gestão de Produtos</a></p> <!-- Link para Gestão de Produtos -->
+        <p><a href="ProductServlet">Gerenciar Produtos</a></p>
+        <p><a href="CategoryServlet">Gerenciar Categorias</a></p>
+        <p><a href="SupplierServlet">Gerenciar Fornecedores</a></p>
+        <p><a href="registerProduct.jsp">Cadastrar Produto</a></p>
     <% } %>
     
     <p><a href="/erp/LogoutServlet">Logout</a></p>

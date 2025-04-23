@@ -24,7 +24,7 @@
 %>
     <h2>Gerenciar Usuários</h2>
 
-    <form action="/erp/UserListServlet" method="get">
+    <form action="UserListServlet" method="get">
         <label for="role">Filtrar por tipo:</label>
         <select name="role" id="role">
             <% if ("Administrador".equals(userRole)) { %>
@@ -55,7 +55,7 @@
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td>
-                        <form action="/erp/DeleteUserServlet" method="post" style="display:inline;">
+                        <form action="DeleteUserServlet" method="post" style="display:inline;">
                             <input type="hidden" name="userId" value="<%= user.id %>">
                             <input type="hidden" name="userType" value="<%= filtro %>">
                             <input type="submit" value="Deletar">

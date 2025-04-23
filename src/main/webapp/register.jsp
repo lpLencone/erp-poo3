@@ -8,7 +8,7 @@
 <body>
     <h2>Cadastro de Cliente</h2>
 
-    <form action="/erp/RegisterServlet" method="post">
+    <form action="RegisterServlet" method="post">
         <label for="name">Nome:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -21,6 +21,6 @@
         <input type="submit" value="Cadastrar Cliente">
     </form>
 
-    <p><a href="/erp/login.jsp">← Voltar para Login</a></p>
+    <p><a href="login.jsp">← Voltar para Login</a></p>
 </body>
 </html>
