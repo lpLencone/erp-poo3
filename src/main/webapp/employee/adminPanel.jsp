@@ -2,7 +2,7 @@
 <%
     String userRole = session.getAttribute("userRole").toString();
     if ("Cliente".equals(userRole)) {
-        response.sendRedirect("/erp/ProductListServlet");
+        response.sendRedirect("ProductListServlet");
         return;
     }
     String username = (String) session.getAttribute("username");
@@ -20,13 +20,13 @@
     <p>Logado como: <strong><%= username != null ? username : "Usuário Desconhecido" %> (<%= userRole %>)</strong></p>
 
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole)) { %>
-        <p><a href="/erp/registerEmployee.jsp">Cadastrar Funcionário</a></p>
-        <p><a href="/erp/userManagement.jsp">Gerenciar Usuários</a></p>
+        <p><a href="/erp/admin/registerEmployee.jsp">Cadastrar Funcionário</a></p>
+        <p><a href="/erp/admin/userManagement.jsp">Gerenciar Usuários</a></p>
     <% } %>
 
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole) || "Funcionario".equals(userRole)) { %>
-        <p><a href="/erp/registerCategory.jsp">Cadastrar Categoria</a></p>
-        <p><a href="/erp/registerProduct.jsp">Cadastrar Produto</a></p>
+        <p><a href="/erp/admin/registerCategory.jsp">Cadastrar Categoria</a></p>
+        <p><a href="registerProduct.jsp">Cadastrar Produto</a></p>
     <% } %>
     
     <p><a href="/erp/LogoutServlet">Logout</a></p>

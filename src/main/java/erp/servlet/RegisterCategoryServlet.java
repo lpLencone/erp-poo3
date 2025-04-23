@@ -41,12 +41,12 @@ public class RegisterCategoryServlet extends HttpServlet {
 
             // Envia a mensagem para a página JSP
             request.setAttribute("message", message);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/registerCategory.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("admin/registerCategory.jsp");
             dispatcher.forward(request, response);
 
         } catch (Exception e) {
             request.setAttribute("message", "Erro: " + e.getMessage());
-            request.getRequestDispatcher("/registerCategory.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/registerCategory.jsp").forward(request, response);
         }
     }
 }

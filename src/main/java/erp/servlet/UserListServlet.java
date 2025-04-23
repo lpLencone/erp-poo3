@@ -30,7 +30,7 @@ public class UserListServlet extends HttpServlet {
 
         request.setAttribute("users", users);
         request.setAttribute("filtro", role);
-        request.getRequestDispatcher("userManagement.jsp").forward(request, response);
+        request.getRequestDispatcher("admin/userManagement.jsp").forward(request, response);
     }
 
     private int roleToId(String role) {

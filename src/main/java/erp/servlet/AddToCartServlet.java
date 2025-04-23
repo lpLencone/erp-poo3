@@ -31,7 +31,7 @@ public class AddToCartServlet extends HttpServlet {
 
         Product product = productDAO.getProductById(productId);
         if (product == null) {
-            response.sendRedirect("ProductListServlet");
+            response.sendRedirect("/erp/ProductListServlet");
             return;
         }
 
@@ -68,6 +68,6 @@ public class AddToCartServlet extends HttpServlet {
         }
 
         session.setAttribute("cart", cart);
-        response.sendRedirect("ProductListServlet");
+        response.sendRedirect("/erp/ProductListServlet");
     }
 }

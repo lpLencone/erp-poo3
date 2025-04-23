@@ -61,6 +61,6 @@
         <% } %>
     </table>
 
-    <p><a href="viewCart.jsp">Ver Carrinho</a> | <a href="logout.jsp">Sair</a></p>
+    <p><a href="/erp/viewCart.jsp">Ver Carrinho</a> | <a href="/erp/LogoutServlet">Sair</a></p>
 </body>
 </html>

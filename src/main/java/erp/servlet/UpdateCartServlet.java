@@ -54,6 +54,6 @@ public class UpdateCartServlet extends HttpServlet {
             }
         }
 
-        response.sendRedirect("viewCart.jsp");
+        response.sendRedirect("/erp/viewCart.jsp");
     }
 }

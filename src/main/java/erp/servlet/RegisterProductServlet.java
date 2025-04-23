@@ -44,6 +44,6 @@ public class RegisterProductServlet extends HttpServlet {
 
         // Adiciona a mensagem no request e encaminha de volta para o JSP
         request.setAttribute("message", message);
-        request.getRequestDispatcher("/registerProduct.jsp").forward(request, response);
+        request.getRequestDispatcher("admin/registerProduct.jsp").forward(request, response);
     }
 }

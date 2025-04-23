@@ -17,7 +17,7 @@
         } 
     %>
 
-    <form action="/erp/LoginServlet" method="post">
+    <form action="LoginServlet" method="post">
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br><br>
 
@@ -27,7 +27,7 @@
         <input type="submit" value="Entrar">
     </form>
 
-    <p><a href="/erp/register.jsp">Cadastrar</a></p>
+    <p><a href="register.jsp">Cadastrar</a></p>
 
 </body>
 </html>

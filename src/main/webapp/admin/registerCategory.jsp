@@ -26,6 +26,6 @@
     </form>
 
     <br>
-    <p><a href="/erp/adminPanel.jsp">Voltar para o painel administrativo</a></p>
+    <p><a href="/erp/employee/adminPanel.jsp">Voltar para o painel administrativo</a></p>
 </body>
 </html>

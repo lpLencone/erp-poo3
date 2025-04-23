@@ -18,7 +18,7 @@
         }
     %>
 
-    <form action="/erp/RegisterProductServlet" method="post">
+    <form action="RegisterProductServlet" method="post">
         <label for="name">Nome do Produto:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -71,6 +71,6 @@
         <input type="submit" value="Cadastrar Produto">
     </form>
 
-    <p><a href="/erp/adminPanel.jsp">Voltar para o painel administrativo</a></p>
+    <p><a href="adminPanel.jsp">Voltar para o painel administrativo</a></p>
 </body>
 </html>

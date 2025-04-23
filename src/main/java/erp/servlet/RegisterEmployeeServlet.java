@@ -35,7 +35,7 @@ public class RegisterEmployeeServlet extends HttpServlet {
         try {
             if (userDAO.isEmailInUse(email)) {
                 request.setAttribute("errorMessage", "Erro: O email já está em uso. Por favor, escolha outro.");
-                request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
+                request.getRequestDispatcher("admin/registerEmployee.jsp").forward(request, response);
                 return;
             }
 
@@ -45,12 +45,12 @@ public class RegisterEmployeeServlet extends HttpServlet {
                 response.sendRedirect("painel.jsp");
             } else {
                 request.setAttribute("errorMessage", "Erro ao cadastrar usuário.");
-                request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
+                request.getRequestDispatcher("admin/registerEmployee.jsp").forward(request, response);
             }
 
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Erro ao cadastrar usuário: " + e.getMessage());
-            request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
+            request.getRequestDispatcher("admin/registerEmployee.jsp").forward(request, response);
         }
     }
 }

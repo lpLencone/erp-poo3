@@ -17,7 +17,7 @@
         <p style="color: red;">${errorMessage}</p>
     </c:if>
 
-    <form action="/erp/RegisterEmployeeServlet" method="post">
+    <form action="RegisterEmployeeServlet" method="post">
         <label for="name">Nome:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -70,6 +70,6 @@
         <input type="submit" value="Cadastrar Usuário">
     </form>
 
-    <p><a href="/erp/adminPanel.jsp">Voltar para o Painel</a></p>
+    <p><a href="/erp/employee/adminPanel.jsp">Voltar para o Painel</a></p>
 </body>
 </html>

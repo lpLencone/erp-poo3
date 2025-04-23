@@ -111,6 +111,22 @@ public class UserDAO {
         }
         return users;
     }
+    
+    public boolean deleteUserById(int id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     // Método para autenticar um usuário com base no email e senha
     public User authenticateUser(String email, String senha) {

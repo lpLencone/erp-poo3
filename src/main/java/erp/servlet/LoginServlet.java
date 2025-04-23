@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
                 if (session.getAttribute("userRole").equals("Cliente")) {
                 	response.sendRedirect("/erp/ProductListServlet");
                 } else {
-                	response.sendRedirect("adminPanel.jsp");                	
+                	response.sendRedirect("/erp/employee/adminPanel.jsp");                	
                 }
             } else {
             	response.sendRedirect("login.jsp?error=1");

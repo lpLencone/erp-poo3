@@ -85,7 +85,7 @@
     %>
         <div class="total">Total: R$ <%= String.format("%.2f", total) %></div>
 
-        <form action="CheckoutServlet" method="post">
+        <form action="/erp/CheckoutServlet" method="post">
             <button type="submit">Finalizar Compra</button>
         </form>
     <% 
@@ -95,6 +95,6 @@
     <% } %>
 
     <br>
-    <a href="ProductListServlet">Continuar comprando</a>
+    <a href="/erp/ProductListServlet">Continuar comprando</a>
 </body>
 </html>

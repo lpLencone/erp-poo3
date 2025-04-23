@@ -1,60 +1,48 @@
 package erp.servlet;
 
 import java.io.IOException;
-import java.sql.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
 import erp.dao.RoleDAO;
+import erp.dao.UserDAO;
+import erp.model.User;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private final String url = "jdbc:postgresql://localhost/erp";
-    private final String user = "postgres";
-    private final String password = "admin";
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
+        String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
+        String password = request.getParameter("password");
 
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection conn = DriverManager.getConnection(url, user, password);
-
+            // Obtém o ID do papel "Cliente"
             RoleDAO roleDAO = new RoleDAO();
-            int roleIdCliente;
-			try {
-				roleIdCliente = roleDAO.getRoleIdByName("Cliente");
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
+            int roleIdCliente = roleDAO.getRoleIdByName("Cliente");
 
-            String sql = "INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nome);
-            stmt.setString(2, email);
-            stmt.setString(3, senha);
-            stmt.setInt(4, roleIdCliente);
+            // Cria um novo usuário com o papel de cliente
+            User user = new User();
+            user.name = name;
+            user.email = email;
+            user.password = password;
+            user.roleId = roleIdCliente;
 
-            int linhasAfetadas = stmt.executeUpdate();
+            // Insere o usuário no banco usando UserDAO
+            UserDAO userDAO = new UserDAO();
+            boolean sucesso = userDAO.insertUser(user);
 
-            if (linhasAfetadas > 0) {
-                response.sendRedirect("login.jsp"); // Redireciona para login após cadastro
+            if (sucesso) {
+                response.sendRedirect("login.jsp");
             } else {
                 response.getWriter().println("Erro ao cadastrar cliente.");
             }
 
-            stmt.close();
-            conn.close();
-
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (Exception e) {
             response.getWriter().println("Erro: " + e.getMessage());
         }
     }
