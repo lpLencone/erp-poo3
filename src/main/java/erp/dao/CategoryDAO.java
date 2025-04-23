@@ -18,7 +18,7 @@ public class CategoryDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Category category = new Category(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
+                Category category = new Category(rs.getInt("id"), rs.getString("name"));
                 categories.add(category);
             }
         } catch (SQLException e) {
@@ -27,35 +27,43 @@ public class CategoryDAO {
 
         return categories;
     }
-
-    // Método para inserir uma nova categoria
-    public boolean insertCategory(Category category) {
-        String sql = "INSERT INTO categories (name, description) VALUES (?, ?)";
-
+    
+    public boolean categoryExists(String name) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM categories WHERE name = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
 
-            stmt.setString(1, category.name);
-            stmt.setString(2, category.description);
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+    // Método para inserir uma nova categoria
+    public boolean insertCategory(Category category) throws SQLException {
+        if (categoryExists(category.name)) {
+            return false; // Categoria já existe
         }
 
-        return false;
+        String sql = "INSERT INTO categories (name) VALUES (?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, category.name);
+            return stmt.executeUpdate() > 0;
+        }
     }
 
     // Método para atualizar uma categoria existente
     public boolean updateCategory(Category category) {
-        String sql = "UPDATE categories SET name = ?, description = ? WHERE id = ?";
+        String sql = "UPDATE categories SET name = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, category.name);
-            stmt.setString(2, category.description);
-            stmt.setInt(3, category.id);
+            stmt.setInt(2, category.id);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {

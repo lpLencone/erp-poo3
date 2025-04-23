@@ -39,7 +39,7 @@ public class LoginServlet extends HttpServlet {
 
             if (user != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("user", user);
+                session.setAttribute("username", user.name);
                 session.setAttribute("userRole", roleDAO.getRoleById(user.roleId).name);
                 session.setAttribute("userId", user.id);
 
@@ -47,7 +47,11 @@ public class LoginServlet extends HttpServlet {
                 String userAgent = request.getHeader("User-Agent");
                 LogUtil.logActionToDatabase(user.id, "Realizou login", ip, userAgent);
 
-                response.sendRedirect("painel.jsp");
+                if (session.getAttribute("userRole").equals("Cliente")) {
+                	response.sendRedirect("/erp/ProductListServlet");
+                } else {
+                	response.sendRedirect("adminPanel.jsp");                	
+                }
             } else {
             	response.sendRedirect("login.jsp?error=1");
             }

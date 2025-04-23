@@ -1,8 +1,8 @@
 package erp.servlet;
 
 import erp.dao.ProductDAO;
+import erp.model.CartItem;
 import erp.model.Product;
-import erp.model.CartItem; // Certifique-se de ter renomeado ItemCarrinho para CartItem
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,35 +15,59 @@ import java.util.List;
 public class AddToCartServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private ProductDAO productDAO;
+
+    @Override
+    public void init() throws ServletException {
+        productDAO = new ProductDAO();
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
         int productId = Integer.parseInt(request.getParameter("productId"));
-        ProductDAO dao = new ProductDAO();
-        Product product = dao.getProductById(productId);
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-        if (product != null) {
-            HttpSession session = request.getSession(false);
-            List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-
-            if (cart == null) {
-                cart = new ArrayList<>();
-            }
-
-            boolean found = false;
-            for (CartItem item : cart) {
-                if (item.product.id == product.id) {
-                    item.quantity++;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                cart.add(new CartItem(product, 1));
-            }
-
-            session.setAttribute("cart", cart);
+        Product product = productDAO.getProductById(productId);
+        if (product == null) {
+            response.sendRedirect("ProductListServlet");
+            return;
         }
 
-        response.sendRedirect("/erp/ProductListServlet");
+        HttpSession session = request.getSession();
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new ArrayList<>();
+        }
+
+        boolean found = false;
+        for (CartItem item : cart) {
+        	if (item.product.id == productId) {
+        	    int newQuantity = item.quantity + quantity;
+        	    if (newQuantity <= product.stock) {
+        	        item.quantity = newQuantity;
+        	    } else {
+        	        item.quantity = product.stock;
+        	        session.setAttribute("cartMessage", "A quantidade de '" + product.name + "' foi ajustada para o máximo em estoque.");
+        	    }
+        	    found = true;
+        	    break;
+        	}
+        }
+
+        if (!found) {
+        	if (quantity <= product.stock) {
+        	    cart.add(new CartItem(product, quantity));
+        	} else if (product.stock > 0) {
+        	    cart.add(new CartItem(product, product.stock));
+        	    session.setAttribute("cartMessage", "A quantidade de '" + product.name + "' foi ajustada para o máximo em estoque.");
+        	} else {
+        	    session.setAttribute("cartMessage", "O produto '" + product.name + "' está fora de estoque.");
+        	}
+        }
+
+        session.setAttribute("cart", cart);
+        response.sendRedirect("ProductListServlet");
     }
 }

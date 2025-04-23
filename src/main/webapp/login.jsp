@@ -27,7 +27,7 @@
         <input type="submit" value="Entrar">
     </form>
 
-    <p><a href="/erp/cadastroCliente.jsp">Cadastrar</a></p>
+    <p><a href="/erp/register.jsp">Cadastrar</a></p>
 
 </body>
 </html>

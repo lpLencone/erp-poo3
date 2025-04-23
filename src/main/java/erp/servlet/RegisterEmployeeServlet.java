@@ -9,8 +9,8 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/CadastrarUsuarioServlet")
-public class CadastrarFuncionarioServlet extends HttpServlet {
+@WebServlet("/RegisterEmployeeServlet")
+public class RegisterEmployeeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -18,12 +18,12 @@ public class CadastrarFuncionarioServlet extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-        String nome = request.getParameter("nome");
+        String name = request.getParameter("name");
         String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
+        String password = request.getParameter("password");
         String roleIdStr = request.getParameter("role_id");
 
-        if (nome == null || email == null || senha == null || roleIdStr == null) {
+        if (name == null || email == null || password == null || roleIdStr == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Campos obrigatórios faltando.");
             return;
         }
@@ -33,29 +33,24 @@ public class CadastrarFuncionarioServlet extends HttpServlet {
         UserDAO userDAO = new UserDAO();
 
         try {
-            // Verifica se o email já está em uso
             if (userDAO.isEmailInUse(email)) {
-                // Se o email já estiver em uso, passa a mensagem de erro para a página
                 request.setAttribute("errorMessage", "Erro: O email já está em uso. Por favor, escolha outro.");
-                // Redireciona de volta para a página de cadastro de usuário
-                request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
+                request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
                 return;
             }
 
-            // Usar o UserDAO para cadastrar o usuário
-            boolean sucesso = userDAO.insertUser(new User(nome, email, senha, roleId));
+            boolean success = userDAO.insertUser(new User(name, email, password, roleId));
 
-            if (sucesso) {
+            if (success) {
                 response.sendRedirect("painel.jsp");
             } else {
                 request.setAttribute("errorMessage", "Erro ao cadastrar usuário.");
-                request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
+                request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
             }
 
         } catch (SQLException e) {
-            // Captura qualquer exceção SQL e mostra a mensagem de erro
             request.setAttribute("errorMessage", "Erro ao cadastrar usuário: " + e.getMessage());
-            request.getRequestDispatcher("/cadastroUsuario.jsp").forward(request, response);
+            request.getRequestDispatcher("/registerEmployee.jsp").forward(request, response);
         }
     }
 }

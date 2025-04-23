@@ -8,7 +8,7 @@
 <body>
     <h2>Cadastro de Cliente</h2>
 
-    <form action="/erp/CadastrarClienteServlet" method="post">
+    <form action="/erp/RegisterServlet" method="post">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" required><br><br>
 

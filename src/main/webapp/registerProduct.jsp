@@ -18,12 +18,9 @@
         }
     %>
 
-    <form action="/erp/CadastrarProdutoServlet" method="post">
+    <form action="/erp/RegisterProductServlet" method="post">
         <label for="name">Nome do Produto:</label><br>
         <input type="text" id="name" name="name" required><br><br>
-
-        <label for="description">Descrição:</label><br>
-        <textarea id="description" name="description" rows="4" cols="30"></textarea><br><br>
 
         <label for="price">Preço:</label><br>
         <input type="number" id="price" name="price" step="0.01" required><br><br>
@@ -74,6 +71,6 @@
         <input type="submit" value="Cadastrar Produto">
     </form>
 
-    <p><a href="/erp/painel.html">Voltar para o Painel</a></p>
+    <p><a href="/erp/adminPanel.jsp">Voltar para o painel administrativo</a></p>
 </body>
 </html>

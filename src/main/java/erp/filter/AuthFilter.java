@@ -20,9 +20,9 @@ public class AuthFilter implements Filter {
         System.out.println(uri);
         HttpSession session = httpRequest.getSession(false);
 
-        boolean loggedIn = (session != null && session.getAttribute("user") != null);
+        boolean loggedIn = (session != null && session.getAttribute("userId") != null);
         boolean isLoginPage = uri.endsWith("login.jsp") || uri.endsWith("LoginServlet");
-        boolean isSingUpPage = uri.endsWith("cadastroCliente.jsp") || uri.endsWith("CadastrarClienteServlet");
+        boolean isSingUpPage = uri.endsWith("register.jsp") || uri.endsWith("RegisterServlet");
         boolean isStaticResource = uri.contains("/css/") || uri.contains("/js/") || uri.contains("/images/");
 
         if (loggedIn || isLoginPage || isSingUpPage || isStaticResource) {

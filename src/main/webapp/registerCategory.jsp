@@ -8,17 +8,24 @@
 <body>
     <h2>Cadastrar Nova Categoria</h2>
 
-    <form action="CadastrarCategoriaServlet" method="post">
+    <!-- Mostra a mensagem, se existir -->
+    <%
+        String message = (String) request.getAttribute("message");
+        if (message != null) {
+    %>
+        <p style="color: <%= message.startsWith("Erro") ? "red" : "green" %>;"><%= message %></p>
+    <%
+        }
+    %>
+
+    <form action="RegisterCategoryServlet" method="post">
         <label for="name">Nome da Categoria:</label>
         <input type="text" id="name" name="name" required>
-
-        <label for="description">Descrição:</label>
-        <input type="text" id="description" name="description" required>
 
         <input type="submit" value="Cadastrar">
     </form>
 
     <br>
-    <a href="index.html">Voltar para o índice</a>
+    <p><a href="/erp/adminPanel.jsp">Voltar para o painel administrativo</a></p>
 </body>
 </html>

@@ -28,6 +28,6 @@
         <input type="submit" value="Cadastrar">
     </form>
 
-    <p><a href="painel.jsp">Voltar ao Painel</a></p>
+    <p><a href="adminPanel.jsp">Voltar ao Painel</a></p>
 </body>
 </html>

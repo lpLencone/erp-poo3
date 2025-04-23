@@ -9,13 +9,12 @@ import java.util.List;
 public class SupplierDAO {
 
     // Criar um novo fornecedor
-    public boolean createSupplier(Supplier supplier) {
-        String sql = "INSERT INTO suppliers (name, contact_info) VALUES (?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
+    public boolean insertSupplier(Supplier supplier) {
+        String sql = "INSERT INTO suppliers (name) VALUES (?)";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, supplier.name);
-            stmt.setString(2, supplier.contactInfo);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -28,14 +27,14 @@ public class SupplierDAO {
     // Obter todos os fornecedores
     public List<Supplier> getAllSuppliers() {
         List<Supplier> suppliers = new ArrayList<>();
-        String sql = "SELECT id, name, contact_info FROM suppliers";
+        String sql = "SELECT id, name FROM suppliers";
         
-        try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
+        try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Supplier supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("contact_info"));
+                Supplier supplier = new Supplier(rs.getInt("id"), rs.getString("name"));
                 suppliers.add(supplier);
             }
         } catch (SQLException e) {
@@ -47,15 +46,15 @@ public class SupplierDAO {
     // Obter um fornecedor por ID
     public Supplier getSupplierById(int id) {
         Supplier supplier = null;
-        String sql = "SELECT id, name, contact_info FROM suppliers WHERE id = ?";
+        String sql = "SELECT id, name FROM suppliers WHERE id = ?";
         
-        try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("contact_info"));
+                    supplier = new Supplier(rs.getInt("id"), rs.getString("name"));
                 }
             }
         } catch (SQLException e) {
@@ -66,13 +65,12 @@ public class SupplierDAO {
 
     // Atualizar um fornecedor
     public boolean updateSupplier(Supplier supplier) {
-        String sql = "UPDATE suppliers SET name = ?, contact_info = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
+        String sql = "UPDATE suppliers SET name = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, supplier.name);
-            stmt.setString(2, supplier.contactInfo);
-            stmt.setInt(3, supplier.id);
+            stmt.setInt(2, supplier.id);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -85,7 +83,7 @@ public class SupplierDAO {
     // Deletar um fornecedor
     public boolean deleteSupplier(int id) {
         String sql = "DELETE FROM suppliers WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);

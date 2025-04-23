@@ -8,8 +8,8 @@ import javax.servlet.http.*;
 
 import erp.dao.RoleDAO;
 
-@WebServlet("/CadastrarClienteServlet")
-public class CadastrarClienteServlet extends HttpServlet {
+@WebServlet("/RegisterServlet")
+public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final String url = "jdbc:postgresql://localhost/erp";

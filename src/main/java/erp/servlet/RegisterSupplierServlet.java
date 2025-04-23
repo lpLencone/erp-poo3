@@ -8,8 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/CadastrarFornecedorServlet")
-public class CadastrarFornecedorServlet extends HttpServlet {
+@WebServlet("/RegisterSupplierServlet")
+public class RegisterSupplierServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private SupplierDAO supplierDAO;
@@ -24,10 +24,8 @@ public class CadastrarFornecedorServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String name = request.getParameter("name");
-        String contact = request.getParameter("contact");
-
-        Supplier supplier = new Supplier(name, contact);
-        boolean success = supplierDAO.createSupplier(supplier);
+        Supplier supplier = new Supplier(name);
+        boolean success = supplierDAO.insertSupplier(supplier);
 
         if (success) {
             response.sendRedirect("cadastrar_fornecedor.jsp?mensagem=Fornecedor cadastrado com sucesso!");

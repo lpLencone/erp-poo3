@@ -3,6 +3,7 @@
 <%@ page import="erp.model.Product" %>
 <%
     List<Product> products = (List<Product>) request.getAttribute("products");
+    String errorMessage = (String) request.getAttribute("errorMessage");
 %>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -12,6 +13,16 @@
 </head>
 <body>
     <h2>Produtos Disponíveis</h2>
+
+    <%
+	    String message = (String) session.getAttribute("cartMessage");
+	    if (message != null) {
+	%>
+	    <p style="color: red;"><%= message %></p>
+	<%
+	        session.removeAttribute("cartMessage");
+	    }
+	%>
 
     <table border="1">
         <tr>
@@ -30,11 +41,18 @@
                 <td>R$ <%= String.format("%.2f", p.price) %></td>
                 <td><%= p.stock %></td>
                 <td>
-                    <form action="/erp/AddToCartServlet" method="post" style="margin: 0;">
-                        <input type="hidden" name="productId" value="<%= p.id %>"/>
-                        <button type="submit">Adicionar ao Carrinho</button>
-                    </form>
-                </td>
+				    <form action="/erp/AddToCartServlet" method="post" style="margin: 0;">
+				        <input type="hidden" name="productId" value="<%= p.id %>"/>
+				        <input type="number"
+				               name="quantity"
+				               value="<%= p.stock == 0 ? 0 : 1 %>"
+				               min="<%= p.stock == 0 ? 0 : 1 %>"
+				               max="<%= p.stock %>"
+				               style="width: 60px;" />
+				        <button type="submit" <%= p.stock == 0 ? "disabled" : "" %>>Adicionar ao Carrinho</button>
+				    </form>
+				</td>
+
             </tr>
         <% 
             }

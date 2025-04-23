@@ -3,7 +3,7 @@ package erp.servlet;
 import erp.dao.ProductDAO;
 import erp.model.Product;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -24,13 +24,12 @@ public class ProductListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            // Recupera a lista de produtos do banco de dados
             List<Product> products = productDAO.getAllProducts();
 
-            // Define a lista de produtos como atributo na requisição
-            request.setAttribute("products", products);
+            // Ordenar: produtos com estoque > 0 primeiro, depois os com estoque 0
+            products.sort(Comparator.comparingInt(p -> (p.stock == 0 ? 1 : 0)));
 
-            // Redireciona para o JSP que exibirá os produtos
+            request.setAttribute("products", products);
             request.getRequestDispatcher("/productList.jsp").forward(request, response);
 
         } catch (Exception e) {

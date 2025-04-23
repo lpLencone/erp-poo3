@@ -62,6 +62,32 @@ public class UserDAO {
         }
         return null;
     }
+    
+    public List<User> findUsersByRoleId(int roleId) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE role_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, roleId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.id = rs.getInt("id");
+                user.name = rs.getString("name");
+                user.email = rs.getString("email");
+                user.roleId = rs.getInt("role_id");
+                users.add(user);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return users;
+    }
 
     // Método para obter todos os usuários
     public List<User> getAllUsers() {

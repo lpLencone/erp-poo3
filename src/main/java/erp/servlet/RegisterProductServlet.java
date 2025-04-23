@@ -8,8 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/CadastrarProdutoServlet")
-public class CadastrarProdutoServlet extends HttpServlet {
+@WebServlet("/RegisterProductServlet")
+public class RegisterProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -44,6 +44,6 @@ public class CadastrarProdutoServlet extends HttpServlet {
 
         // Adiciona a mensagem no request e encaminha de volta para o JSP
         request.setAttribute("message", message);
-        request.getRequestDispatcher("/cadastroProduto.jsp").forward(request, response);
+        request.getRequestDispatcher("/registerProduct.jsp").forward(request, response);
     }
 }
