@@ -10,27 +10,35 @@
 <body>
     <h2>Cadastro de Produto</h2>
 
+    <!-- Exibe a mensagem de sucesso ou erro, se houver -->
+    <%
+        String message = (String) request.getAttribute("message");
+        if (message != null) {
+            out.println("<h3>" + message + "</h3>");
+        }
+    %>
+
     <form action="/erp/CadastrarProdutoServlet" method="post">
-        <label for="nome">Nome do Produto:</label><br>
-        <input type="text" id="nome" name="nome" required><br><br>
+        <label for="name">Nome do Produto:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
 
-        <label for="descricao">Descrição:</label><br>
-        <textarea id="descricao" name="descricao" rows="4" cols="30"></textarea><br><br>
+        <label for="description">Descrição:</label><br>
+        <textarea id="description" name="description" rows="4" cols="30"></textarea><br><br>
 
-        <label for="preco">Preço:</label><br>
-        <input type="number" id="preco" name="preco" step="0.01" required><br><br>
+        <label for="price">Preço:</label><br>
+        <input type="number" id="price" name="price" step="0.01" required><br><br>
 
-        <label for="categoria">Categoria:</label><br>
-        <select id="categoria" name="categoria_id" required>
+        <label for="category">Categoria:</label><br>
+        <select id="category" name="category_id" required>
             <%
                 try (Connection conn = DatabaseConnection.getConnection();
                      Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery("SELECT id, name FROM categories ORDER BY name")) {
 
                     while (rs.next()) {
-                        int id = rs.getInt("id");
-                        String name = rs.getString("name");
-                        out.println("<option value=\"" + id + "\">" + name + "</option>");
+                        int categoryId = rs.getInt("id");
+                        String categoryName = rs.getString("name");
+                        out.println("<option value=\"" + categoryId + "\">" + categoryName + "</option>");
                     }
 
                 } catch (Exception e) {
@@ -40,17 +48,17 @@
             %>
         </select><br><br>
 
-        <label for="fornecedor">Fornecedor:</label><br>
-        <select id="fornecedor" name="fornecedor_id" required>
+        <label for="supplier">Fornecedor:</label><br>
+        <select id="supplier" name="supplier_id" required>
             <%
                 try (Connection conn = DatabaseConnection.getConnection();
                      Statement stmt = conn.createStatement();
                      ResultSet rs = stmt.executeQuery("SELECT id, name FROM suppliers ORDER BY name")) {
 
                     while (rs.next()) {
-                        int id = rs.getInt("id");
-                        String name = rs.getString("name");
-                        out.println("<option value=\"" + id + "\">" + name + "</option>");
+                        int supplierId = rs.getInt("id");
+                        String supplierName = rs.getString("name");
+                        out.println("<option value=\"" + supplierId + "\">" + supplierName + "</option>");
                     }
 
                 } catch (Exception e) {
@@ -59,6 +67,9 @@
                 }
             %>
         </select><br><br>
+
+        <label for="stock">Estoque:</label><br>
+        <input type="number" id="stock" name="stock" required><br><br>
 
         <input type="submit" value="Cadastrar Produto">
     </form>

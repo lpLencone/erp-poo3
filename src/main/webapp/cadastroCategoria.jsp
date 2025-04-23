@@ -9,11 +9,11 @@
     <h2>Cadastrar Nova Categoria</h2>
 
     <form action="CadastrarCategoriaServlet" method="post">
-        <label for="nome">Nome da Categoria:</label>
-        <input type="text" id="nome" name="nome" required>
+        <label for="name">Nome da Categoria:</label>
+        <input type="text" id="name" name="name" required>
 
-        <label for="descricao">Descrição:</label>
-        <input type="text" id="descricao" name="descricao" required>
+        <label for="description">Descrição:</label>
+        <input type="text" id="description" name="description" required>
 
         <input type="submit" value="Cadastrar">
     </form>

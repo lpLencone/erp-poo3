@@ -1,71 +1,49 @@
 package erp.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
+import erp.dao.ProductDAO;
+import erp.model.Product;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.io.IOException;
 
 @WebServlet("/CadastrarProdutoServlet")
 public class CadastrarProdutoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private final String url = "jdbc:postgresql://localhost:5432/erp";
-    private final String user = "postgres";
-    private final String password = "admin";
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
-        String descricao = request.getParameter("descricao");
-        double preco = Double.parseDouble(request.getParameter("preco"));
-        int categoriaId = Integer.parseInt(request.getParameter("categoria_id"));
-        int fornecedorId = Integer.parseInt(request.getParameter("fornecedor_id"));
-
+        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
+
+        String message = null;
 
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection conn = DriverManager.getConnection(url, user, password);
+            String name = request.getParameter("name");
+            String description = request.getParameter("description");
+            double price = Double.parseDouble(request.getParameter("price"));
+            int categoryId = Integer.parseInt(request.getParameter("category_id"));
+            int supplierId = Integer.parseInt(request.getParameter("supplier_id"));
+            int stock = Integer.parseInt(request.getParameter("stock"));
 
-            // Inserir produto
-            String sqlProduto = "INSERT INTO products (name, description, price, category_id) VALUES (?, ?, ?, ?) RETURNING id";
-            PreparedStatement stmtProduto = conn.prepareStatement(sqlProduto);
-            stmtProduto.setString(1, nome);
-            stmtProduto.setString(2, descricao);
-            stmtProduto.setDouble(3, preco);
-            stmtProduto.setInt(4, categoriaId);
+            Product product = new Product(name, description, price, categoryId, stock);
+            ProductDAO productDAO = new ProductDAO();
+            boolean success = productDAO.createProduct(product, supplierId);
 
-            ResultSet rs = stmtProduto.executeQuery();
-            if (rs.next()) {
-                int produtoId = rs.getInt("id");
-
-                // Relacionar com fornecedor na tabela supplier_products
-                String sqlRelacao = "INSERT INTO supplier_products (supplier_id, product_id) VALUES (?, ?)";
-                PreparedStatement stmtRelacao = conn.prepareStatement(sqlRelacao);
-                stmtRelacao.setInt(1, fornecedorId);
-                stmtRelacao.setInt(2, produtoId);
-                stmtRelacao.executeUpdate();
-                stmtRelacao.close();
-
-                out.println("<h3>Produto cadastrado com sucesso!</h3>");
+            if (success) {
+                message = "Produto cadastrado com sucesso!";
             } else {
-                out.println("<h3>Erro ao inserir o produto.</h3>");
+                message = "Erro ao cadastrar produto.";
             }
-
-            rs.close();
-            stmtProduto.close();
-            conn.close();
-
         } catch (Exception e) {
-            out.println("<h3>Erro ao cadastrar produto: " + e.getMessage() + "</h3>");
-            e.printStackTrace(out);
+            message = "Erro: " + e.getMessage();
+            e.printStackTrace();
         }
 
-        out.println("<br><a href=\"/erp/cadastroProduto.jsp\">Voltar</a>");
+        // Adiciona a mensagem no request e encaminha de volta para o JSP
+        request.setAttribute("message", message);
+        request.getRequestDispatcher("/cadastroProduto.jsp").forward(request, response);
     }
 }

@@ -17,9 +17,8 @@ public class AuthFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String uri = httpRequest.getRequestURI();
-        HttpSession session = httpRequest.getSession(false);
-        
         System.out.println(uri);
+        HttpSession session = httpRequest.getSession(false);
 
         boolean loggedIn = (session != null && session.getAttribute("user") != null);
         boolean isLoginPage = uri.endsWith("login.jsp") || uri.endsWith("LoginServlet");

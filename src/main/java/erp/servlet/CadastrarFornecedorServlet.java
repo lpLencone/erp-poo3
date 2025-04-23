@@ -16,27 +16,22 @@ public class CadastrarFornecedorServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        supplierDAO = new SupplierDAO(); // Inicializa o DAO
+        supplierDAO = new SupplierDAO(); // Initialize DAO
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
-        String contato = request.getParameter("contato");
+        String name = request.getParameter("name");
+        String contact = request.getParameter("contact");
 
-        Supplier supplier = new Supplier();
-        supplier.setName(nome);
-        supplier.setContactInfo(contato);
+        Supplier supplier = new Supplier(name, contact);
+        boolean success = supplierDAO.createSupplier(supplier);
 
-        boolean sucesso = supplierDAO.createSupplier(supplier);
-
-        if (sucesso) {
-            // Redireciona para o JSP com uma mensagem de sucesso
+        if (success) {
             response.sendRedirect("cadastrar_fornecedor.jsp?mensagem=Fornecedor cadastrado com sucesso!");
         } else {
-            // Redireciona com mensagem de erro
             response.sendRedirect("cadastrar_fornecedor.jsp?mensagem=Erro ao cadastrar fornecedor.");
         }
     }

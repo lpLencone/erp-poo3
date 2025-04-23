@@ -9,8 +9,8 @@
     <h2>Login</h2>
 
     <% 
-        String erro = request.getParameter("erro");
-        if ("1".equals(erro)) {
+        String error = request.getParameter("error");
+        if ("1".equals(error)) {
     %>
         <p style="color:red;">Email ou senha incorretos.</p>
     <% 
@@ -21,13 +21,13 @@
         <label for="email">Email:</label><br>
         <input type="email" id="email" name="email" required><br><br>
 
-        <label for="senha">Senha:</label><br>
+        <label for="password">Senha:</label><br>
         <input type="password" id="password" name="password" required><br><br>
 
         <input type="submit" value="Entrar">
     </form>
 
-    <p><a href="/erp/cadastroCliente.jsp">Cadastrar Cliente</a></p>
+    <p><a href="/erp/cadastroCliente.jsp">Cadastrar</a></p>
 
 </body>
 </html>

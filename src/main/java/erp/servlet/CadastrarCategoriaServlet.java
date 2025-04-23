@@ -21,17 +21,15 @@ public class CadastrarCategoriaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nome = request.getParameter("nome");
-        String descricao = request.getParameter("descricao");
+        String name = request.getParameter("nome");
+        String description = request.getParameter("descricao");
 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         try {
             // Cria uma instância do modelo Category
-            Category category = new Category();
-            category.setName(nome);
-            category.setDescription(descricao);
+            Category category = new Category(name, description);
 
             // Chama o método do CategoryDAO para cadastrar a categoria
             boolean sucesso = categoryDAO.insertCategory(category);

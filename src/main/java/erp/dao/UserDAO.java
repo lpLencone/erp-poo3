@@ -14,10 +14,10 @@ public class UserDAO {
 
         try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, u.getName());
-            stmt.setString(2, u.getEmail());
-            stmt.setString(3, u.getPassword());
-            stmt.setInt(4, u.getRoleId());
+            stmt.setString(1, u.name);
+            stmt.setString(2, u.email);
+            stmt.setString(3, u.password);
+            stmt.setInt(4, u.roleId);
 
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
@@ -50,11 +50,11 @@ public class UserDAO {
 
             if (rs.next()) {
                 User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("role_id"));
+                user.id = rs.getInt("id");
+                user.name = rs.getString("name");
+                user.email = rs.getString("email");
+                user.password = rs.getString("password");
+                user.roleId = rs.getInt("role_id");
                 return user;
             }
         } catch (SQLException e) {
@@ -73,11 +73,11 @@ public class UserDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 User u = new User();
-                u.setId(rs.getInt("id"));
-                u.setName(rs.getString("name"));
-                u.setEmail(rs.getString("email"));
-                u.setPassword(rs.getString("password"));
-                u.setRoleId(rs.getInt("role_id"));
+                u.id = rs.getInt("id");
+                u.name = rs.getString("name");
+                u.email = rs.getString("email");
+                u.password = rs.getString("password");
+                u.roleId = rs.getInt("role_id");
                 users.add(u);
             }
         } catch (SQLException e) {
@@ -100,11 +100,11 @@ public class UserDAO {
 
             if (rs.next()) {
                 user = new User();
-                user.setId(rs.getInt("id"));
-                user.setName(rs.getString("name"));
-                user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
-                user.setRoleId(rs.getInt("role_id"));
+                user.id = rs.getInt("id");
+                user.name = rs.getString("name");
+                user.email = rs.getString("email");
+                user.password = rs.getString("password");
+                user.roleId = rs.getInt("role_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();

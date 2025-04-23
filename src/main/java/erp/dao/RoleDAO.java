@@ -17,7 +17,7 @@ public class RoleDAO {
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, role.getName());
+            stmt.setString(1, role.name);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -37,9 +37,7 @@ public class RoleDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Role role = new Role();
-                role.setId(rs.getInt("id"));
-                role.setName(rs.getString("name"));
+                Role role = new Role(rs.getInt("id"), rs.getString("name"));
                 roles.add(role);
             }
         } catch (SQLException e) {
@@ -59,9 +57,7 @@ public class RoleDAO {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    role = new Role();
-                    role.setId(rs.getInt("id"));
-                    role.setName(rs.getString("name"));
+                    role = new Role(rs.getInt("id"), rs.getString("name"));
                 }
             }
         } catch (SQLException e) {
@@ -76,8 +72,8 @@ public class RoleDAO {
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, role.getName());
-            stmt.setInt(2, role.getId());
+            stmt.setString(1, role.name);
+            stmt.setInt(2, role.id);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;

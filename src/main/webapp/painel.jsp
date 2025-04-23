@@ -2,14 +2,20 @@
 <%
     // Verifica se a sessão está nula (usuário não está logado)
     if (session == null || session.getAttribute("userRole") == null) {
-        // Redireciona para a página de login
         response.sendRedirect("/erp/login.jsp");
-        return;  // Impede que o restante da página seja processado
+        return;
     }
 
-    // Obtém o papel do usuário da sessão
+    // Obtém o papel do usuário
     String userRole = session.getAttribute("userRole").toString();
+
+    // Se for cliente, redireciona direto para listagem de produtos
+    if ("Cliente".equals(userRole)) {
+        response.sendRedirect("/erp/ProductListServlet");
+        return;
+    }
 %>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -18,7 +24,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-    <h1>Bem-vindo ao sistema!</h1>
+    <h1>Mostrar logado como</h1>
 
     <!-- Verifica se o usuário é admin (gerente) -->
     <% if ("Administrador".equals(userRole)) { %>
@@ -26,10 +32,9 @@
     <% } %>
 
     <!-- Verifica se o usuário é admin ou funcionário -->
-    <% if ("Administrador".equals(userRole) || "Funcionario".equals(userRole)) { %>
+    <% if ("Administrador".equals(userRole) || "Funcionario".equals(userRole) || "Gerente".equals(userRole)) { %>
         <p><a href="/erp/cadastroCategoria.jsp">Cadastrar Categoria</a></p>
-        <p><a href="/erp/cadastroCliente.jsp">Cadastrar Cliente</a></p>
-        <p><a href="/erp/cadastroProduto.html">Cadastrar Produto</a></p>
+        <p><a href="/erp/cadastroProduto.jsp">Cadastrar Produto</a></p>
     <% } %>
 
     <!-- Verifica se o usuário é cliente -->

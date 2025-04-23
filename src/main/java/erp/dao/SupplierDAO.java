@@ -14,8 +14,8 @@ public class SupplierDAO {
         try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, supplier.getName());
-            stmt.setString(2, supplier.getContactInfo());
+            stmt.setString(1, supplier.name);
+            stmt.setString(2, supplier.contactInfo);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -35,10 +35,7 @@ public class SupplierDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Supplier supplier = new Supplier();
-                supplier.setId(rs.getInt("id"));
-                supplier.setName(rs.getString("name"));
-                supplier.setContactInfo(rs.getString("contact_info"));
+                Supplier supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("contact_info"));
                 suppliers.add(supplier);
             }
         } catch (SQLException e) {
@@ -58,10 +55,7 @@ public class SupplierDAO {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    supplier = new Supplier();
-                    supplier.setId(rs.getInt("id"));
-                    supplier.setName(rs.getString("name"));
-                    supplier.setContactInfo(rs.getString("contact_info"));
+                    supplier = new Supplier(rs.getInt("id"), rs.getString("name"), rs.getString("contact_info"));
                 }
             }
         } catch (SQLException e) {
@@ -76,9 +70,9 @@ public class SupplierDAO {
         try (Connection conn = DatabaseConnection.getConnection(); // Usa a classe para obter a conexão
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, supplier.getName());
-            stmt.setString(2, supplier.getContactInfo());
-            stmt.setInt(3, supplier.getId());
+            stmt.setString(1, supplier.name);
+            stmt.setString(2, supplier.contactInfo);
+            stmt.setInt(3, supplier.id);
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;

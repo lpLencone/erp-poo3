@@ -2,41 +2,17 @@ package erp.model;
 
 public class Supplier {
 
-    private int id;
-    private String name;
-    private String contactInfo;
+    public int id;
+    public String name;
+    public String contactInfo;
 
-    // Construtor
-    public Supplier() {}
-
-    // Getters e Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Supplier(int id, String name, String contactInfo) {
         this.name = name;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(String contactInfo) {
         this.contactInfo = contactInfo;
     }
 
-    // Método toString() para exibir os dados do fornecedor
-    @Override
-    public String toString() {
-        return "Supplier [id=" + id + ", name=" + name + ", contactInfo=" + contactInfo + "]";
+    public Supplier(String name, String contactInfo) {
+        this.name = name;
+        this.contactInfo = contactInfo;
     }
 }
