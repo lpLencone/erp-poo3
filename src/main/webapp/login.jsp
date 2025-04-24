@@ -27,7 +27,7 @@
         <input type="submit" value="Entrar">
     </form>
 
-    <p><a href="register.jsp">Cadastrar</a></p>
+    <p><a href="client/register.jsp">Cadastrar</a></p>
 
 </body>
 </html>

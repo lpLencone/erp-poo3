@@ -48,9 +48,9 @@ public class LoginServlet extends HttpServlet {
                 LogUtil.logActionToDatabase(user.id, "Realizou login", ip, userAgent);
 
                 if (session.getAttribute("userRole").equals("Cliente")) {
-                	response.sendRedirect("/erp/ProductListServlet");
+                	response.sendRedirect("client/ProductListServlet");
                 } else {
-                	response.sendRedirect("/erp/employee/adminPanel.jsp");                	
+                	response.sendRedirect("employee/adminPanel.jsp");                	
                 }
             } else {
             	response.sendRedirect("login.jsp?error=1");

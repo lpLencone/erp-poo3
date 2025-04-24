@@ -1,10 +1,13 @@
 package erp.servlet.admin;
 
 import erp.dao.UserDAO;
+import erp.exception.UserNotFoundException;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/admin/DeleteUserServlet")
 public class DeleteUserServlet extends HttpServlet {
@@ -22,28 +25,31 @@ public class DeleteUserServlet extends HttpServlet {
 
         String userRole = (String) request.getSession().getAttribute("userRole");
         if (userRole == null || (!userRole.equals("Administrador") && !userRole.equals("Gerente"))) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); 
             response.getWriter().println("Acesso não autorizado.");
             return;
+            // TODO: redirecionar para unauthorized.jsp
         }
 
         int userId = Integer.parseInt(request.getParameter("userId"));
-        String userType = request.getParameter("userType");
+        String userFilter = request.getParameter("userFilter");
 
         // Verifica permissões
-        if (userRole.equals("Gerente") && (userType.equals("Administrador") || userType.equals("Gerente"))) {
+        if (userRole.equals("Gerente") && (userFilter.equals("Administrador") || userFilter.equals("Gerente"))) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().println("Gerentes não podem deletar administradores ou outros gerentes.");
             return;
         }
 
-        boolean deleted = userDAO.deleteUserById(userId);
-
-        if (deleted) {
-            response.sendRedirect("UserListServlet?role=" + userType);
-        } else {
-            response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().println("<h3>Erro ao deletar usuário.</h3>");
+        try {
+            userDAO.deleteUserById(userId);
+            response.sendRedirect("UserListServlet?role=" + userFilter);
+        } catch (UserNotFoundException e) {
+            // Redireciona para a página de gestão de usuários com a mensagem de erro
+            response.sendRedirect("userManagement.jsp?error=" + e.getMessage());
+        } catch (SQLException e) {
+            // Trate erros de SQL genéricos (como falha na conexão com o banco)
+            response.sendRedirect("userManagement.jsp?error=Erro de banco de dados: " + e.getMessage());
         }
     }
 }

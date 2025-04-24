@@ -24,22 +24,10 @@ public class UserListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String role = request.getParameter("role");
-        int roleId = roleToId(role);
-
-        List<User> users = userDAO.findUsersByRoleId(roleId);
+        List<User> users = userDAO.findUsersByRoleName(role);
 
         request.setAttribute("users", users);
-        request.setAttribute("filtro", role);
+        request.setAttribute("roleFilter", role);
         request.getRequestDispatcher("userManagement.jsp").forward(request, response);
-    }
-
-    private int roleToId(String role) {
-        switch (role) {
-            case "Administrador": return 1;
-            case "Gerente": return 2;
-            case "Funcionario": return 3;
-            case "Cliente": return 4;
-            default: return -1;
-        }
     }
 }

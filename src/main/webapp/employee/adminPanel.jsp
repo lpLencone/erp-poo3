@@ -22,12 +22,12 @@
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole)) { %>
         <p><a href="/erp/admin/registerEmployee.jsp">Cadastrar Funcionário</a></p>
         <p><a href="/erp/admin/registerSupplier.jsp">Cadastrar Fornecedor</a></p>
+        <p><a href="/erp/admin/registerCategory.jsp">Cadastrar Categoria</a></p>
         <p><a href="/erp/admin/userManagement.jsp">Gerenciar Usuários</a></p>
     <% } %>
 
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole) || "Funcionario".equals(userRole)) { %>
-        <p><a href="/erp/admin/registerCategory.jsp">Cadastrar Categoria</a></p>
-        <p><a href="ProductServlet">Gerenciar Produtos</a></p>
+        <p><a href="productManagement.jsp">Gerenciar Produtos</a></p>
         <p><a href="CategoryServlet">Gerenciar Categorias</a></p>
         <p><a href="SupplierServlet">Gerenciar Fornecedores</a></p>
         <p><a href="registerProduct.jsp">Cadastrar Produto</a></p>

@@ -1,19 +1,14 @@
 package erp.model;
 
-import java.util.List;
-
 public class Invoice {
-    public int invoiceId;
-    public List<CartItem> items;
+	public int id;
+    public int userId;
     public double total;
-    public String issuedTo;
     public String date;
 
-    public Invoice(int id, List<CartItem> items, double total, String issuedTo, String date) {
-        this.invoiceId = id;
-        this.items = items;
+    public Invoice(int userId, double total, String date) {
+        this.userId = userId;
         this.total = total;
-        this.issuedTo = issuedTo;
         this.date = date;
     }
 }

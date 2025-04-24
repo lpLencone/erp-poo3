@@ -30,7 +30,7 @@ public class AuthFilter implements Filter {
             chain.doFilter(request, response);
         } else {
             // Usuário não autenticado, redireciona para login
-            httpResponse.sendRedirect("login.jsp");
+            httpResponse.sendRedirect("/erp/login.jsp");
         }
     }
 

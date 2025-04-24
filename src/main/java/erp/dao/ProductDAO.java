@@ -22,7 +22,6 @@ public class ProductDAO {
                 Product p = new Product(
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getString("description"),
                     rs.getDouble("price"),
                     rs.getInt("category_id"),
                     rs.getInt("stock")
@@ -46,7 +45,6 @@ public class ProductDAO {
                 return new Product(
                     rs.getInt("id"),
                     rs.getString("name"),
-                    rs.getString("description"),
                     rs.getDouble("price"),
                     rs.getInt("category_id"),
                     rs.getInt("stock")
@@ -59,15 +57,14 @@ public class ProductDAO {
     }
 
     public boolean insertProduct(Product p) {
-        String sql = "INSERT INTO products (name, description, price, category_id, stock) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO products (name, price, category_id, stock) VALUES (?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, p.name);
-            stmt.setString(2, p.description);
-            stmt.setDouble(3, p.price);
-            stmt.setInt(4, p.categoryId);
-            stmt.setInt(5, p.stock);
+            stmt.setDouble(2, p.price);
+            stmt.setInt(3, p.categoryId);
+            stmt.setInt(4, p.stock);
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
@@ -77,16 +74,15 @@ public class ProductDAO {
     }
 
     public boolean updateProduct(Product p) {
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, category_id = ?, stock = ? WHERE id = ?";
+        String sql = "UPDATE products SET name = ?, price = ?, category_id = ?, stock = ? WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, p.name);
-            stmt.setString(2, p.description);
-            stmt.setDouble(3, p.price);
-            stmt.setInt(4, p.categoryId);
-            stmt.setInt(5, p.stock);
-            stmt.setInt(6, p.id);
+            stmt.setDouble(2, p.price);
+            stmt.setInt(3, p.categoryId);
+            stmt.setInt(4, p.stock);
+            stmt.setInt(5, p.id);
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {

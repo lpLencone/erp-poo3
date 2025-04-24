@@ -1,28 +1,45 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="erp.model.Product" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="erp.model.*, erp.dao.*, java.util.*" %>
 <%
-    Product product = (Product) request.getAttribute("product");
-    boolean editing = (product != null && product.id > 0);
+    int productId = Integer.parseInt(request.getParameter("id"));
+    ProductDAO productDAO = new ProductDAO();
+    Product product = productDAO.getProductById(productId);
+
+    CategoryDAO categoryDAO = new CategoryDAO();
+    List<Category> categories = categoryDAO.getAllCategories();
 %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title><%= editing ? "Edit" : "New" %> Product</title>
+    <title>Editar Produto</title>
 </head>
 <body>
-    <h2><%= editing ? "Edit" : "New" %> Product</h2>
-    <form action="ProductServlet" method="post">
-        <input type="hidden" name="action" value="save">
-        <input type="hidden" name="id" value="<%= editing ? product.id : 0 %>">
-        <p>Name: <input type="text" name="name" value="<%= editing ? product.name : "" %>" required></p>
-        <p>Description: <input type="text" name="description" value="<%= editing ? product.description : "" %>"></p>
-        <p>Price: <input type="number" name="price" step="0.01" value="<%= editing ? product.price : 0.0 %>" required></p>
-        <p>Stock: <input type="number" name="stock" value="<%= editing ? product.stock : 0 %>" required></p>
-        <p>Category Id: <input type="number" name="categoryId" value="<%= editing ? product.categoryId : 0 %>" required></p>
-        
-        <p><button type="submit">Save</button></p>
+    <h1>Editar Produto</h1>
+
+    <form action="UpdateProductServlet" method="post">
+        <input type="hidden" name="id" value="<%= product.id %>">
+
+        <label for="name">Nome:</label>
+        <input type="text" id="name" name="name" value="<%= product.name %>" required><br><br>
+
+        <label for="price">Preço:</label>
+        <input type="number" id="price" name="price" step="0.01" value="<%= product.price %>" required><br><br>
+
+        <label for="category">Categoria:</label>
+        <select id="category" name="categoryId" required>
+            <% for (Category c : categories) { %>
+                <option value="<%= c.id %>" <%= c.id == product.categoryId ? "selected" : "" %>><%= c.name %></option>
+            <% } %>
+        </select><br><br>
+
+        <label for="stock">Estoque:</label>
+        <input type="number" id="stock" name="stock" value="<%= product.stock %>" required><br><br>
+
+        <input type="submit" value="Atualizar Produto">
     </form>
-    <p><a href="ProductServlet">Back to list</a></p>
+
+    <br>
+    <a href="productManagement.jsp">Voltar à Gestão de Produtos</a>
 </body>
 </html>

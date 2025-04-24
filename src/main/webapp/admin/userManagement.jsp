@@ -38,13 +38,21 @@
 
     <hr>
 
-    <%
+    <% 
+        // Exibindo mensagem de erro, se existir
+        String errorMessage = request.getParameter("error");
+        if (errorMessage != null) { 
+    %>
+        <p style="color:red;">Erro: <%= errorMessage %></p>
+    <% 
+        }
+
         List<User> users = (List<User>) request.getAttribute("users");
-        String filtro = (String) request.getAttribute("filtro");
+        String filter = (String) request.getAttribute("roleFilter");
 
         if (users != null && !users.isEmpty()) {
     %>
-        <h3>Usuários do tipo: <%= filtro %></h3>
+        <h3>Usuários do tipo: <%= filter %></h3>
         <table border="1">
             <tr>
                 <th>ID</th><th>Nome</th><th>Email</th><th>Ações</th>
@@ -57,15 +65,15 @@
                     <td>
                         <form action="DeleteUserServlet" method="post" style="display:inline;">
                             <input type="hidden" name="userId" value="<%= user.id %>">
-                            <input type="hidden" name="userType" value="<%= filtro %>">
+                            <input type="hidden" name="userFilter" value="<%= filter %>">
                             <input type="submit" value="Deletar">
                         </form>
                     </td>
                 </tr>
             <% } %>
         </table>
-    <% } else if (filtro != null) { %>
-        <p>Nenhum usuário encontrado para o tipo <strong><%= filtro %></strong>.</p>
+    <% } else if (filter != null) { %>
+        <p>Nenhum usuário encontrado para o tipo <strong><%= filter %></strong>.</p>
     <% } %>
 
     <br><a href="/erp/employee/adminPanel.jsp">Voltar ao Painel</a>
