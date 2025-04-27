@@ -38,10 +38,10 @@
                 <%
                     for (InvoiceItem item : invoiceItems) {
                         Product product = productDAO.getProductById(item.productId);
-                        double totalItem = item.price * item.quantity;
+                        double totalItem = product.price * item.quantity;
                 %>
                     <tr>
-                        <td>R$ <%= String.format("%.2f", item.price) %></td>
+                        <td>R$ <%= String.format("%.2f", product.price) %></td>
                         <td><%= item.quantity %></td>
                         <td>R$ <%= String.format("%.2f", totalItem) %></td>
                     </tr>

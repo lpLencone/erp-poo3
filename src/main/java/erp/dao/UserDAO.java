@@ -137,6 +137,7 @@ public class UserDAO {
             throw new SQLException("Erro ao tentar deletar o usuário: " + e.getMessage(), e);
         }
     }
+    
     // Método para autenticar um usuário com base no email e senha
     public User authenticateUser(String email, String password) {
         User user = null;
@@ -162,5 +163,30 @@ public class UserDAO {
         }
 
         return user;
+    }
+    
+    public boolean updateUser(User user) {
+        boolean isUpdated = false;
+        String sql = "UPDATE users SET name = ?, email = ?, role_id = ? WHERE id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            // Setando os parâmetros para a consulta
+            stmt.setString(1, user.name);
+            stmt.setString(2, user.email);
+            stmt.setInt(3, user.roleId);
+            stmt.setInt(4, user.id);
+
+            // Executando a atualização no banco de dados
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                isUpdated = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return isUpdated;
     }
 }

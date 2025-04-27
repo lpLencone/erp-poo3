@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="erp.dao.CategoryDAO, erp.model.Category, java.util.List" %>
+<%@ page import="erp.dao.CategoryDAO, erp.model.Category, erp.dao.SupplierDAO, erp.model.Supplier, java.util.List" %>
 <%
     CategoryDAO categoryDAO = new CategoryDAO();
     List<Category> categories = categoryDAO.getAllCategories();
+
+    SupplierDAO supplierDAO = new SupplierDAO();
+    List<Supplier> suppliers = supplierDAO.getAllSuppliers();
 %>
 <!DOCTYPE html>
 <html>
@@ -24,6 +27,13 @@
         <select id="categoryId" name="categoryId" required>
             <% for (Category category : categories) { %>
                 <option value="<%= category.id %>"><%= category.name %></option>
+            <% } %>
+        </select><br><br>
+
+        <label for="supplierId">Fornecedor:</label>
+        <select id="supplierId" name="supplierId" required>
+            <% for (Supplier supplier : suppliers) { %>
+                <option value="<%= supplier.id %>"><%= supplier.name %></option>
             <% } %>
         </select><br><br>
 

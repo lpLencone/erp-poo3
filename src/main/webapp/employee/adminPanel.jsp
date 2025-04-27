@@ -19,6 +19,10 @@
 
     <p>Logado como: <strong><%= username != null ? username : "Usuário Desconhecido" %> (<%= userRole %>)</strong></p>
 
+    <% if ("Administrador".equals(userRole)) { %>
+       <p><a href="/erp/admin/ListLogsServlet">Ver Logs</a></p> 
+    <% } %>
+
     <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole)) { %>
         <p><a href="/erp/admin/registerEmployee.jsp">Cadastrar Funcionário</a></p>
         <p><a href="/erp/admin/registerSupplier.jsp">Cadastrar Fornecedor</a></p>

@@ -14,20 +14,19 @@ import java.util.ArrayList;
 public class InvoiceItemDAO {
 
     public void insertInvoiceItem(InvoiceItem item) throws SQLException {
-        String insertItemSQL = "INSERT INTO invoice_items (invoice_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+        String insertItemSQL = "INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(insertItemSQL)) {
             stmt.setInt(1, item.id);
             stmt.setInt(2, item.productId);
             stmt.setInt(3, item.quantity);
-            stmt.setDouble(4, item.price);
             stmt.executeUpdate();
         }
     }
     
     public List<InvoiceItem> getInvoiceItemsByInvoiceId(int invoiceId) throws SQLException {
         List<InvoiceItem> invoiceItems = new ArrayList<>();
-        String sql = "SELECT id, product_id, quantity, price FROM invoice_items WHERE invoice_id = ?";
+        String sql = "SELECT id, product_id, quantity FROM invoice_items WHERE invoice_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -37,8 +36,7 @@ public class InvoiceItemDAO {
                     int id = rs.getInt("id");
                     int productId = rs.getInt("product_id");
                     int quantity = rs.getInt("quantity");
-                    double price = rs.getDouble("price");
-                    invoiceItems.add(new InvoiceItem(id, productId, quantity, price));
+                    invoiceItems.add(new InvoiceItem(id, productId, quantity));
                 }
             }
         }

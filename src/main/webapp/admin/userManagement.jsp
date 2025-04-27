@@ -37,7 +37,15 @@
     </form>
 
     <hr>
-
+    <%
+        String message = (String) session.getAttribute("message");
+        if (message != null) {
+    %>
+        <p style="text-align:center; color: green;"><%= message %></p>
+    <%
+            session.removeAttribute("message");
+        }
+    %>
     <% 
         // Exibindo mensagem de erro, se existir
         String errorMessage = request.getParameter("error");
@@ -63,6 +71,7 @@
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td>
+                        <a href="editUser.jsp?id=<%= user.id %>" style="margin-right:10px;">Editar</a>
                         <form action="DeleteUserServlet" method="post" style="display:inline;">
                             <input type="hidden" name="userId" value="<%= user.id %>">
                             <input type="hidden" name="userFilter" value="<%= filter %>">

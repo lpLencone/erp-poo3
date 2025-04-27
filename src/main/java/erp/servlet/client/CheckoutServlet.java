@@ -67,9 +67,8 @@ public class CheckoutServlet extends HttpServlet {
             for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
                 int productId = entry.getKey();
                 int quantity = entry.getValue();
-                Product product = productDAO.getProductById(productId);
 
-                invoiceItemDAO.insertInvoiceItem(new InvoiceItem(invoiceId, productId, quantity, product.price));
+                invoiceItemDAO.insertInvoiceItem(new InvoiceItem(invoiceId, productId, quantity));
 
                 String updateStockSQL = "UPDATE products SET stock = stock - ? WHERE id = ?";
                 try (PreparedStatement stockStmt = conn.prepareStatement(updateStockSQL)) {

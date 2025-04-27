@@ -29,6 +29,8 @@ public class DeleteUserServlet extends HttpServlet {
             response.getWriter().println("Acesso não autorizado.");
             return;
             // TODO: redirecionar para unauthorized.jsp
+            // /erp/unauthorized.jsp
+            // /admin/deleteuser...
         }
 
         int userId = Integer.parseInt(request.getParameter("userId"));
