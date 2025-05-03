@@ -73,8 +73,8 @@ public class CategoryDAO {
         return false;
     }
 
-    // Método para deletar uma categoria
-    public boolean deleteCategory(int categoryId) {
+    // Método para deletar uma categoria e lançar exceção em caso de erro
+    public boolean deleteCategoryById(int categoryId) throws SQLException {
         String sql = "DELETE FROM categories WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -83,12 +83,9 @@ public class CategoryDAO {
             stmt.setInt(1, categoryId);
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
-        return false;
     }
+
 
 	public Category getCategoryById(int id) {
 		String sql = "SELECT categories WHERE id = ?";

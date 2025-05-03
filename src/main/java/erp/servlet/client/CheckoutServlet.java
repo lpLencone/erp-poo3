@@ -11,6 +11,7 @@ import erp.model.Product;
 import erp.model.Receipt;
 
 import erp.util.DatabaseConnection;
+import erp.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,6 +40,10 @@ public class CheckoutServlet extends HttpServlet {
         InvoiceDAO invoiceDAO = new InvoiceDAO();
         InvoiceItemDAO invoiceItemDAO = new InvoiceItemDAO();
         ReceiptDAO receiptDAO = new ReceiptDAO();
+        
+        int userId = (int) session.getAttribute("userId");
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
 
         try (Connection conn = DatabaseConnection.getConnection()) {
             conn.setAutoCommit(false);
@@ -61,7 +66,6 @@ public class CheckoutServlet extends HttpServlet {
                 total += product.price * quantity;
             }
 
-            int userId = (int) session.getAttribute("userId");
             int invoiceId = invoiceDAO.insertInvoice(new Invoice(userId, total, sqlDate.toString()));
 
             for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
@@ -82,7 +86,6 @@ public class CheckoutServlet extends HttpServlet {
 
             conn.commit();
 
-            // Carrega os itens da fatura se quiser exibir na view, mas não atribui ao modelo Invoice
             List<InvoiceItem> invoiceItems = invoiceItemDAO.getInvoiceItemsByInvoiceId(invoiceId);
 
             Invoice invoice = new Invoice(userId, total, sqlDate.toString());
@@ -92,11 +95,14 @@ public class CheckoutServlet extends HttpServlet {
             session.setAttribute("receipt", receipt);
             session.setAttribute("invoiceItems", invoiceItems);
             session.removeAttribute("cart");
+            
+            LogUtil.logActionToDatabase(userId, "Realizou compra com fatura de id: " + invoice.id, ip, userAgent);
 
             response.sendRedirect("checkoutSuccess.jsp");
 
         } catch (Exception e) {
             e.printStackTrace();
+            LogUtil.logActionToDatabase(userId, "Não conseguiu realizar uma compra. " + e.getMessage(), ip, userAgent);
             request.setAttribute("error", "Erro ao finalizar a compra. Tente novamente.");
             request.getRequestDispatcher("viewCart.jsp").forward(request, response);
         }

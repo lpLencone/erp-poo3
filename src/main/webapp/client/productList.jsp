@@ -28,62 +28,70 @@
         <p style="color: red;"><%= errorMessage %></p>
     <% } %>
 
-    <table border="1">
-        <tr>
-            <th>Nome</th>
-            <th>Preço</th>
-            <th>Estoque</th>
-            <th>Ação</th>
-        </tr>
-        <% if (products != null) {
-            for (Product p : products) {
-                int currentQty = cart.getOrDefault(p.id, 0);
-        %>
+    <form action="AddToCartServlet" method="post" 
+    	  onsubmit="return prepareAllQuantities();">	
+        <table border="1">
             <tr>
-                <td><%= p.name %></td>
-                <td>R$ <%= String.format("%.2f", p.price) %></td>
-                <td><%= p.stock %></td>
-                <td>
-                    <form action="AddToCartServlet" method="post" style="margin: 0;" onsubmit="return prepareQuantity(this)">
-                        <input type="hidden" name="productId" value="<%= p.id %>"/>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Quantidade</th>
+            </tr>
+            <% if (products != null) {
+                for (Product p : products) {
+                    int currentQty = cart.getOrDefault(p.id, 0);
+            %>
+                <tr>
+                    <td><%= p.name %></td>
+                    <td>R$ <%= String.format("%.2f", p.price) %></td>
+                    <td><%= p.stock %></td>
+                    <td>
                         <div style="display: flex; align-items: center; gap: 4px;">
                             <button type="button" onclick="adjustQuantity(this, -1, <%= p.stock %>)" <%= p.stock == 0 ? "disabled" : "" %>>−</button>
-                            <input type="text" name="displayQuantity" value="<%= currentQty %>" readonly style="width: 30px; text-align: center;" />
+                            <input type="text" name="displayQuantity_<%= p.id %>" value="<%= currentQty %>" readonly style="width: 30px; text-align: center;" />
                             <button type="button" onclick="adjustQuantity(this, 1, <%= p.stock %>)" <%= p.stock == 0 ? "disabled" : "" %>>+</button>
                         </div>
-                        <input type="hidden" name="quantity" value="<%= currentQty %>" />
-                        <br/>
-                        <button type="submit" <%= p.stock == 0 ? "disabled" : "" %>>Atualizar</button>
-                    </form>
-                </td>
-            </tr>
-        <% } } else { %>
-            <tr><td colspan="4">Nenhum produto encontrado.</td></tr>
-        <% } %>
-    </table>
+                        <input type="hidden" name="quantity_<%= p.id %>" value="<%= currentQty %>"/>
+                    </td>
+                </tr>
+            <% } } else { %>
+                <tr><td colspan="4">Nenhum produto encontrado.</td></tr>
+            <% } %>
+        </table>
+
+        <br/>
+        <button type="submit">Atualizar Carrinho</button>
+    </form>
 
     <p><a href="viewCart.jsp">Ver Carrinho</a></p>
+    <p><a href="purchaseHistory.jsp">Histórico de Compras</a></p>
     <p><a href="/erp/LogoutServlet">Sair</a></p>
 
     <script>
         function adjustQuantity(button, delta, maxStock) {
             const form = button.closest("form");
-            const displayInput = form.querySelector("input[name='displayQuantity']");
-            const hiddenInput = form.querySelector("input[name='quantity']");
+            const row = button.closest("tr");
+            const displayInput = row.querySelector("input[name^='displayQuantity_']");
+            const hiddenInput = row.querySelector("input[name^='quantity_']");
 
             let current = parseInt(displayInput.value, 10);
             if (isNaN(current)) current = 0;
 
-            const newValue = Math.max(0, Math.min(current + delta, maxStock));  // Garantir que a quantidade esteja entre 0 e o estoque máximo
+            const newValue = Math.max(0, Math.min(current + delta, maxStock));
             displayInput.value = newValue;
             hiddenInput.value = newValue;
         }
 
-        function prepareQuantity(form) {
-            const displayValue = form.querySelector("input[name='displayQuantity']").value;
-            form.querySelector("input[name='quantity']").value = displayValue;
+        function prepareAllQuantities() {
+            const inputs = document.querySelectorAll("input[name^='displayQuantity_']");
+            inputs.forEach(displayInput => {
+                const productId = displayInput.name.split("_")[1];
+                const hiddenInput = document.querySelector("input[name='quantity_" + productId + "']");
+                hiddenInput.value = displayInput.value;
+            });
             return true;
         }
     </script>
 </body>
+
 </html>

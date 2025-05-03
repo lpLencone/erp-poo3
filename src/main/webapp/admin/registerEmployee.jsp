@@ -34,17 +34,14 @@
                     Class.forName("org.postgresql.Driver");
                     Connection connection = DriverManager.getConnection(
                         "jdbc:postgresql://localhost/erp", "postgres", "admin");
+                    
                     PreparedStatement statement;
-
                     if (userRole.equals("Administrador")) {
-                        // Admin pode ver gerente e funcionário
+                        // Admin pode adicionar gerente e funcionário
                         statement = connection.prepareStatement("SELECT id, name FROM roles WHERE name IN ('Gerente', 'Funcionario')");
-                    } else if (userRole.equals("Gerente")) {
-                        // Gerente só pode ver funcionário
-                        statement = connection.prepareStatement("SELECT id, name FROM roles WHERE name = 'Funcionario'");
                     } else {
-                        statement = null;
-                        out.println("<option disabled>Sem permissão para cadastrar usuários</option>");
+                        // Gerente só pode adicionar funcionário
+                        statement = connection.prepareStatement("SELECT id, name FROM roles WHERE name = 'Funcionario'");
                     }
 
                     if (statement != null) {
@@ -70,6 +67,6 @@
         <input type="submit" value="Cadastrar Usuário">
     </form>
 
-    <p><a href="/erp/employee/adminPanel.jsp">Voltar para o Painel</a></p>
+    <p><a href="userManagement.jsp">Voltar para gerenciamento de usuários</a></p>
 </body>
 </html>

@@ -27,6 +27,15 @@
         .actions form {
             display: inline;
         }
+        .low-stock {
+		    background-color: #ffe5e5; /* vermelho claro */
+		    font-weight: bold;
+		}
+		.low-stock-indicator {
+		    color: red;
+		    font-size: 0.9em;
+		    margin-left: 5px;
+		}       
     </style>
 </head>
 <body>
@@ -67,25 +76,31 @@
     </thead>
     <tbody>
     <%
-        for (Product p : products) {
-    %>
-        <tr>
-            <td><%= p.id %></td>
-            <td><%= p.name %></td>
-            <td>R$ <%= String.format("%.2f", p.price) %></td>
-            <td><%= categoryMap.getOrDefault(p.categoryId, "Desconhecida") %></td>
-            <td><%= p.stock %></td>
-            <td class="actions">
-                <a href="editProduct.jsp?id=<%= p.id %>">Editar</a>
-                <form action="DeleteProductServlet" method="post" onsubmit="return confirm('Deseja remover este produto?');">
-                    <input type="hidden" name="id" value="<%= p.id %>">
-                    <button type="submit">Remover</button>
-                </form>
-            </td>
-        </tr>
-    <%
-        }
-    %>
+    for (Product p : products) {
+        boolean isLowStock = p.stock < 10;
+	%>
+	    <tr class="<%= isLowStock ? "low-stock" : "" %>">
+	        <td><%= p.id %></td>
+	        <td><%= p.name %></td>
+	        <td>R$ <%= String.format("%.2f", p.price) %></td>
+	        <td><%= categoryMap.getOrDefault(p.categoryId, "Desconhecida") %></td>
+	        <td>
+	            <%= p.stock %>
+	            <% if (isLowStock) { %>
+	                <span class="low-stock-indicator">(Baixo!)</span>
+	            <% } %>
+	        </td>
+	        <td class="actions">
+	            <a href="editProduct.jsp?id=<%= p.id %>">Editar</a>
+	            <form action="DeleteProductServlet" method="post" onsubmit="return confirm('Deseja remover este produto?');">
+	                <input type="hidden" name="id" value="<%= p.id %>">
+	                <button type="submit">Remover</button>
+	            </form>
+	        </td>
+	    </tr>
+	<%
+	    }
+	%>
     </tbody>
 </table>
 

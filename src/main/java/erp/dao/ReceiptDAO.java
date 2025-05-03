@@ -27,4 +27,29 @@ public class ReceiptDAO {
             }
         }
     }
+    
+    public Receipt getReceiptByInvoiceId(int invoiceId) {
+        String sql = "SELECT * FROM receipts WHERE invoice_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, invoiceId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Receipt(
+                    rs.getInt("id"),
+                    rs.getInt("invoice_id"),
+                    rs.getDouble("total_paid"),
+                    rs.getString("date")
+                );
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

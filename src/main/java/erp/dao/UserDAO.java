@@ -39,35 +39,11 @@ public class UserDAO {
         }
         return false;
     }
-
-    // Método para obter um usuário pelo email e senha
-    public User getUserByEmailAndPassword(String email, String password) {
-        String sql = "SELECT * FROM users WHERE email = ? AND password = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                User user = new User();
-                user.id = rs.getInt("id");
-                user.name = rs.getString("name");
-                user.email = rs.getString("email");
-                user.password = rs.getString("password");
-                user.roleId = rs.getInt("role_id");
-                return user;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     
     public List<User> findUsersByRoleName(String roleName) {
         List<User> users = new ArrayList<>();
         String sql =
-            "SELECT u.id, u.name, u.email, u.password, u.role_id " +
+            "SELECT u.id, u.name, u.email, u.role_id " +
             "FROM users u " +
             "JOIN roles r ON u.role_id = r.id " +
             "WHERE r.name = ?";
@@ -83,7 +59,6 @@ public class UserDAO {
                 user.id = rs.getInt("id");
                 user.name = rs.getString("name");
                 user.email = rs.getString("email");
-                user.password = rs.getString("password");
                 user.roleId = rs.getInt("role_id");
                 users.add(user);
             }
@@ -99,7 +74,7 @@ public class UserDAO {
     // Método para obter todos os usuários
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users";
+        String sql = "SELECT id, name, email, role_id FROM users";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -109,7 +84,6 @@ public class UserDAO {
                 u.id = rs.getInt("id");
                 u.name = rs.getString("name");
                 u.email = rs.getString("email");
-                u.password = rs.getString("password");
                 u.roleId = rs.getInt("role_id");
                 users.add(u);
             }
@@ -138,10 +112,37 @@ public class UserDAO {
         }
     }
     
+    // Método para obter um usuário pelo id
+    public User getUserById(int id) {
+        User user = null;
+        String sql = "SELECT name, email, role_id FROM users WHERE id= ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                user = new User(
+                	id, 
+                	rs.getString("name"), 
+                	rs.getString("email"), 
+                	null, 
+                	rs.getInt("role_id")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+    
     // Método para autenticar um usuário com base no email e senha
     public User authenticateUser(String email, String password) {
         User user = null;
-        String sql = "SELECT id, name, email, password, role_id FROM users WHERE email = ? AND password = ?";
+        String sql = "SELECT id, name, email, role_id FROM users WHERE email = ? AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -155,7 +156,6 @@ public class UserDAO {
                 user.id = rs.getInt("id");
                 user.name = rs.getString("name");
                 user.email = rs.getString("email");
-                user.password = rs.getString("password");
                 user.roleId = rs.getInt("role_id");
             }
         } catch (SQLException e) {

@@ -19,7 +19,7 @@ public class ListLogsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<ActivityLog> logs = new ArrayList<>();
-        String sql = "SELECT action, timestamp, ip_address, user_agent FROM activity_logs ORDER BY timestamp DESC";
+        String sql = "SELECT user_id, action, timestamp, ip_address, user_agent FROM activity_logs ORDER BY timestamp DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -27,6 +27,7 @@ public class ListLogsServlet extends HttpServlet {
 
             while (rs.next()) {
                 ActivityLog log = new ActivityLog(
+                	rs.getInt("user_id"),
                     rs.getString("action"),
                     rs.getTimestamp("timestamp"),
                     rs.getString("ip_address"),

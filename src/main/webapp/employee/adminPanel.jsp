@@ -1,11 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*, erp.dao.ProductDAO, erp.model.Product" %>
 <%
     String userRole = session.getAttribute("userRole").toString();
-    if ("Cliente".equals(userRole)) {
-        response.sendRedirect("ProductListServlet");
-        return;
+	String username = session.getAttribute("username").toString();
+	
+    ProductDAO productDAO = new ProductDAO();
+    List<Product> products = productDAO.getAllProducts();
+
+    List<Product> lowStockProducts = new ArrayList<>();
+    for (Product p : products) {
+        if (p.stock < 10) {
+            lowStockProducts.add(p);
+        }
     }
-    String username = (String) session.getAttribute("username");
 %>
 
 <!DOCTYPE html>
@@ -16,27 +23,32 @@
 </head>
 <body>
     <h1>Painel</h1>
+    
+    <% if (!lowStockProducts.isEmpty()) { %>
+	    <div style="color: red; font-weight: bold;">
+	        <% if (lowStockProducts.size() == 1) { %>
+	            Aviso: O produto "<%= lowStockProducts.get(0).name %>" está com estoque baixo!
+	        <% } else { %>
+	            Aviso: Existem <%= lowStockProducts.size() %> produtos com estoque baixo!
+	        <% } %>
+	    </div>
+	<% } %>
+	    
 
-    <p>Logado como: <strong><%= username != null ? username : "Usuário Desconhecido" %> (<%= userRole %>)</strong></p>
+    <p>Logado como: <%= username %> (<%= userRole %>)</p>
 
     <% if ("Administrador".equals(userRole)) { %>
-       <p><a href="/erp/admin/ListLogsServlet">Ver Logs</a></p> 
+    <p><a href="/erp/admin/ListLogsServlet">Ver Logs</a></p> 
     <% } %>
 
-    <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole)) { %>
-        <p><a href="/erp/admin/registerEmployee.jsp">Cadastrar Funcionário</a></p>
-        <p><a href="/erp/admin/registerSupplier.jsp">Cadastrar Fornecedor</a></p>
-        <p><a href="/erp/admin/registerCategory.jsp">Cadastrar Categoria</a></p>
-        <p><a href="/erp/admin/userManagement.jsp">Gerenciar Usuários</a></p>
+    <% if (!("Funcionario".equals(userRole))) { %>
+    <p><a href="/erp/admin/userManagement.jsp">Gerenciar Usuários</a></p>
+    <p><a href="/erp/admin/manageSuppliers.jsp">Gerenciar Fornecedores</a></p>
+    <p><a href="/erp/admin/manageCategories.jsp">Gerenciar Categorias</a></p>
     <% } %>
 
-    <% if ("Administrador".equals(userRole) || "Gerente".equals(userRole) || "Funcionario".equals(userRole)) { %>
-        <p><a href="productManagement.jsp">Gerenciar Produtos</a></p>
-        <p><a href="CategoryServlet">Gerenciar Categorias</a></p>
-        <p><a href="SupplierServlet">Gerenciar Fornecedores</a></p>
-        <p><a href="registerProduct.jsp">Cadastrar Produto</a></p>
-    <% } %>
-    
+    <p><a href="productManagement.jsp">Gerenciar Produtos</a></p>
+
     <p><a href="/erp/LogoutServlet">Logout</a></p>
 </body>
 </html>

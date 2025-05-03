@@ -25,28 +25,45 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int productId = Integer.parseInt(request.getParameter("productId"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-
-        Product product = productDAO.getProductById(productId);
-        if (product == null) {
-            response.sendRedirect("ProductListServlet");
-            return;
-        }
-
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
         }
 
-        int currentQty = cart.getOrDefault(productId, 0);
-        int newQty = Math.min(currentQty + quantity, product.stock);  // Limita a quantidade ao estoque máximo
+        // Atualizar todos os produtos enviados
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        StringBuilder messageBuilder = new StringBuilder();
 
-        cart.put(productId, newQty);  // Atualiza a quantidade no carrinho
+        for (String paramName : parameterMap.keySet()) {
+            if (paramName.startsWith("quantity_")) {
+                int productId = Integer.parseInt(paramName.substring(9)); // depois de "quantity_"
+                int quantity = Integer.parseInt(request.getParameter(paramName));
 
-        session.setAttribute("cart", cart);  // Salva o carrinho na sessão
-        session.setAttribute("cartMessage", "A quantidade de '" + product.name + "' foi atualizada.");  // Mensagem de feedback
-        response.sendRedirect("ProductListServlet");  // Redireciona de volta para a lista de produtos
+                Product product = productDAO.getProductById(productId);
+                if (cart.containsKey(productId) && (product == null || product.stock == 0)) {
+                    cart.remove(productId);
+                    messageBuilder
+                    	.append("Produto removido do carrinho (fora de estoque): ID ")
+                    	.append(productId)
+                    	.append(". ");
+                    continue;
+                }
+
+                int newQty = Math.min(quantity, product.stock);
+
+                if (newQty > 0 && cart.getOrDefault(productId, 0) != newQty) {
+                    cart.put(productId, newQty);
+                    messageBuilder.append("'" + product.name + "' atualizado para " + newQty + ". ");
+                } else if (cart.containsKey(productId)) {
+                    cart.remove(productId);
+                    messageBuilder.append("'" + product.name + "' removido do carrinho. ");
+                }
+            }
+        }
+
+        session.setAttribute("cart", cart);
+        session.setAttribute("cartMessage", messageBuilder.toString());
+        response.sendRedirect("ProductListServlet");
     }
 }

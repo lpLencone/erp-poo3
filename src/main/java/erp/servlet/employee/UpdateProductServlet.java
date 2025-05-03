@@ -1,4 +1,5 @@
 package erp.servlet.employee;
+import erp.util.LogUtil;
 
 import erp.dao.ProductDAO;
 import erp.model.Product;
@@ -16,8 +17,13 @@ public class UpdateProductServlet extends HttpServlet {
             throws ServletException, IOException {
 
         try {
-            int id = Integer.parseInt(request.getParameter("id"));
+            HttpSession session = request.getSession(false);
+            int userId = (int) session.getAttribute("userId");
             String name = request.getParameter("name");
+            String ip = request.getRemoteAddr();
+            String userAgent = request.getHeader("User-Agent");
+
+            int id = Integer.parseInt(request.getParameter("id"));
             double price = Double.parseDouble(request.getParameter("price"));
             int categoryId = Integer.parseInt(request.getParameter("categoryId"));
             int stock = Integer.parseInt(request.getParameter("stock"));
@@ -28,8 +34,10 @@ public class UpdateProductServlet extends HttpServlet {
             boolean success = productDAO.updateProduct(updatedProduct);
 
             if (success) {
+                LogUtil.logActionToDatabase(userId, "Alterou o Produto de  nome: "+ name, ip, userAgent);                
                 response.sendRedirect("productManagement.jsp");
             } else {
+                LogUtil.logActionToDatabase(userId, "Nao alterou o Produto de  nome: "+ name, ip, userAgent);                
                 request.setAttribute("error", "Erro ao atualizar produto.");
                 request.getRequestDispatcher("productManagement.jsp").forward(request, response);
             }

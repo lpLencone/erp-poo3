@@ -81,7 +81,7 @@ public class SupplierDAO {
     }
 
     // Deletar um fornecedor
-    public boolean deleteSupplier(int id) {
+    public boolean deleteSupplierById(int id) throws SQLException {
         String sql = "DELETE FROM suppliers WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -90,11 +90,9 @@ public class SupplierDAO {
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
         }
     }
+
     
     public boolean existsByName(String name) {
         String sql = "SELECT 1 FROM suppliers WHERE name = ? LIMIT 1";

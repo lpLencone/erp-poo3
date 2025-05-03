@@ -31,7 +31,7 @@ public class ActivityLogDAO {
 
     public List<ActivityLog> getAllLogs() {
         List<ActivityLog> logs = new ArrayList<>();
-        String sql = "SELECT action, timestamp, ip_address, user_agent FROM activity_logs ORDER BY timestamp DESC";
+        String sql = "SELECT id, action, timestamp, ip_address, user_agent FROM activity_logs ORDER BY timestamp DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
@@ -42,8 +42,9 @@ public class ActivityLogDAO {
                 Timestamp timestamp = rs.getTimestamp("timestamp");
                 String ipAddress = rs.getString("ip_address");
                 String userAgent = rs.getString("user_agent");
+                int id = rs.getInt("id");
 
-                ActivityLog log = new ActivityLog(action, timestamp, ipAddress, userAgent);
+                ActivityLog log = new ActivityLog(id, action, timestamp, ipAddress, userAgent);
                 logs.add(log);
             }
 

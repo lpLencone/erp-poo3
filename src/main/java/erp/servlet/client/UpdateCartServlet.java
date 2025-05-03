@@ -51,7 +51,6 @@ public class UpdateCartServlet extends HttpServlet {
                     }
                 }
             } catch (NumberFormatException ignored) {
-                // Input inválido é simplesmente ignorado
             }
 
             session.setAttribute("cart", cart);

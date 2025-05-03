@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import erp.util.LogUtil;
+
 /**
  * Servlet implementation class LogoutServlet
  */
@@ -27,6 +29,10 @@ public class LogoutServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
+        int userId = (int) session.getAttribute("userId");
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+        LogUtil.logActionToDatabase(userId, "Saiu", ip, userAgent);
 		
 	    if (session != null) {
 	        session.invalidate();

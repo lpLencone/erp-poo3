@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import erp.util.LogUtil;
 
 import java.io.IOException;
 
@@ -21,14 +24,21 @@ public class DeleteProductServlet extends HttpServlet {
 
         if (idParam != null) {
             try {
+                        
+                HttpSession session = request.getSession(false);
+                int userId = (int) session.getAttribute("userId");
+                String ip = request.getRemoteAddr();
+                String userAgent = request.getHeader("User-Agent");
                 int productId = Integer.parseInt(idParam);
                 ProductDAO productDAO = new ProductDAO();
 
                 boolean success = productDAO.deleteProduct(productId);
 
                 if (success) {
+                    LogUtil.logActionToDatabase(userId, "Deletou o Produto de id: " + productId, ip, userAgent);                
                     request.getSession().setAttribute("message", "Produto removido com sucesso.");
                 } else {
+                    LogUtil.logActionToDatabase(userId, "Nao deletou o Produto de id: " + productId, ip, userAgent);
                     request.getSession().setAttribute("message", "Erro ao remover o produto.");
                 }
             } catch (NumberFormatException e) {

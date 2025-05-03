@@ -40,6 +40,7 @@
     <table>
         <thead>
             <tr>
+            	<th>User id</th>
                 <th>Ação</th>
                 <th>Data e Hora</th>
                 <th>Endereço IP</th>
@@ -53,6 +54,7 @@
                     for (ActivityLog log : logs) {
             %>
                 <tr>
+                	<td><%= log.userId %></td>
                     <td><%= log.action %></td>
                     <td><%= log.timestamp %></td>
                     <td><%= log.ipAddress %></td>

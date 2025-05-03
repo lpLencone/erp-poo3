@@ -42,4 +42,30 @@ public class InvoiceItemDAO {
         }
         return invoiceItems;
     }
+    
+    public List<InvoiceItem> getItemsByInvoiceId(int invoiceId) {
+        List<InvoiceItem> items = new ArrayList<>();
+        String sql = "SELECT * FROM invoice_items WHERE invoice_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, invoiceId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                InvoiceItem item = new InvoiceItem(
+                    rs.getInt("invoice_id"),
+                    rs.getInt("product_id"),
+                    rs.getInt("quantity")
+                );
+                items.add(item);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return items;
+    }
 }

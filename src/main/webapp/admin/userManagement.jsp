@@ -8,19 +8,6 @@
 <body>
 <%
     String userRole = (String) session.getAttribute("userRole");
-    if (userRole == null) {
-        response.sendRedirect("login.html");
-        return;
-    }
-
-    if (!userRole.equals("Administrador") && !userRole.equals("Gerente")) {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-%>
-        <h2>401 - Acesso não autorizado</h2>
-        <a href="/erp/productList.jsp">Voltar à lista de produtos</a>
-<%
-        return;
-    }
 %>
     <h2>Gerenciar Usuários</h2>
 
@@ -36,8 +23,14 @@
         <input type="submit" value="Buscar">
     </form>
 
+    <!-- Botão para adicionar novo funcionário -->
+    <form action="registerEmployee.jsp" method="get" style="margin-top: 20px;">
+        <input type="submit" value="Cadastrar Novo Funcionário">
+    </form>
+
     <hr>
-    <%
+    
+    <% 
         String message = (String) session.getAttribute("message");
         if (message != null) {
     %>
@@ -46,8 +39,8 @@
             session.removeAttribute("message");
         }
     %>
+
     <% 
-        // Exibindo mensagem de erro, se existir
         String errorMessage = request.getParameter("error");
         if (errorMessage != null) { 
     %>
@@ -71,7 +64,9 @@
                     <td><%= user.name %></td>
                     <td><%= user.email %></td>
                     <td>
+                    <% if (!filter.equals("Cliente")) { %>
                         <a href="editUser.jsp?id=<%= user.id %>" style="margin-right:10px;">Editar</a>
+                    <% } %>
                         <form action="DeleteUserServlet" method="post" style="display:inline;">
                             <input type="hidden" name="userId" value="<%= user.id %>">
                             <input type="hidden" name="userFilter" value="<%= filter %>">

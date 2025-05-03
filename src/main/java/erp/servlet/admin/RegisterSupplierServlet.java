@@ -2,11 +2,13 @@ package erp.servlet.admin;
 
 import erp.dao.SupplierDAO;
 import erp.model.Supplier;
+import erp.util.LogUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 @WebServlet("/admin/RegisterSupplierServlet")
 public class RegisterSupplierServlet extends HttpServlet {
@@ -25,10 +27,17 @@ public class RegisterSupplierServlet extends HttpServlet {
 
         String name = request.getParameter("name");
 
+        HttpSession session = request.getSession(false);
+        int userId = (int) session.getAttribute("userId");
+        String ip = request.getRemoteAddr();
+        String userAgent = request.getHeader("User-Agent");
+        int id = 0;
+
         try {
             if (supplierDAO.existsByName(name)) {
-                // Fornecedor já existe
-                response.sendRedirect("registerSupplier.jsp?mensagem=Erro: fornecedor já existe.");
+                String message = URLEncoder.encode("Erro: fornecedor já existe.", "UTF-8");
+                LogUtil.logActionToDatabase(userId, "Tentou cadastrar fornecedor existente de nome " + name, ip, userAgent);
+                response.sendRedirect("manageSuppliers.jsp?message=" + message);
                 return;
             }
 
@@ -36,14 +45,19 @@ public class RegisterSupplierServlet extends HttpServlet {
             boolean success = supplierDAO.insertSupplier(supplier);
 
             if (success) {
-                response.sendRedirect("registerSupplier.jsp?mensagem=Fornecedor cadastrado com sucesso!");
+                String message = URLEncoder.encode("Fornecedor cadastrado com sucesso!", "UTF-8");
+                LogUtil.logActionToDatabase(userId, "Cadastrou o(a) fornecedor(a) " + name, ip, userAgent);
+                response.sendRedirect("manageSuppliers.jsp?message=" + message);
             } else {
-                response.sendRedirect("registerSupplier.jsp?mensagem=Erro ao cadastrar fornecedor.");
+                String message = URLEncoder.encode("Erro ao cadastrar fornecedor.", "UTF-8");
+                LogUtil.logActionToDatabase(userId, "Não conseguiu cadastrar o(a) fornecedor(a) " + name, ip, userAgent);
+                response.sendRedirect("manageSuppliers.jsp?message=" + message);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("registerSupplier.jsp?mensagem=Erro interno: " + e.getMessage());
+            String message = URLEncoder.encode("Erro interno: " + e.getMessage(), "UTF-8");
+            response.sendRedirect("manageSuppliers.jsp?message=" + message);
         }
     }
 }
